@@ -9,6 +9,12 @@
 
 import { createMirrorClient, type MirrorClientOptions } from "../../src/index.js";
 
+/**
+ * The order the failover tests are written against (hinai last, so failover reaches it). The
+ * real default is pinned in tests/exports.test.ts.
+ */
+export const TEST_ORDER = ["osudirect", "catboy", "sayobot", "hinai"] as const;
+
 export type Route = (url: string, init?: RequestInit) => Response | Promise<Response>;
 
 /**
@@ -29,6 +35,7 @@ export const ok = (): Response => new Response(zip(), { headers: { "content-leng
 export const stub = (route: Route, options: Omit<MirrorClientOptions, "fetch"> = {}) => {
   const calls: { url: string; headers: Headers }[] = [];
   const client = createMirrorClient({
+    mirrors: TEST_ORDER,
     ...options,
     fetch: async (input, init) => {
       calls.push({ url: String(input), headers: new Headers(init?.headers) });

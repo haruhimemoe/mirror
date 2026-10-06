@@ -5,20 +5,25 @@
     "": {
       "name": "@haruhimemoe/mirror",
       "dependencies": {
-        "@haruhimemoe/hinai": "^0.3.1",
+        "@haruhimemoe/osu": "^0.4.0",
       },
       "devDependencies": {
         "@biomejs/biome": "2.5.14",
         "@types/node": "26.6.2",
         "@vitest/coverage-v8": "5.0.1",
+        "fflate": "0.8.3",
         "msw": "2.15.0",
         "typescript": "7.0.2",
         "vitest": "5.0.1",
         "zod": "4.6.5",
       },
       "peerDependencies": {
+        "msw": "^2.0.0",
         "zod": "^4.0.16",
       },
+      "optionalPeers": [
+        "msw",
+      ],
     },
   },
   "packages": {
@@ -49,8 +54,6 @@
     "@biomejs/cli-win32-arm64": ["@biomejs/cli-win32-arm64@2.5.14", "", { "os": "win32", "cpu": "arm64" }, "sha512-pHgAFffmZtaYoxavEsWEYNvcA7NwOIjLyqw2HXyLbt16xYryX0L4fMV2u0G9ag6LNYPIoqWaWqzUcnc6rLGGXg=="],
 
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.5.14", "", { "os": "win32", "cpu": "x64" }, "sha512-oJWmBhoHsnhUKIke+0gXDX0mltJrWHA1UyHsrTlXwX0TL64ilVZAo+TYZm97baecV0esBdpzy3k96q+09JaZUQ=="],
-
-    "@haruhimemoe/hinai": ["@haruhimemoe/hinai@0.3.1", "", { "dependencies": { "@haruhimemoe/osu": "^0.4.0" }, "peerDependencies": { "msw": "^2.0.0", "zod": "^4.0.16" }, "optionalPeers": ["msw"] }, "sha512-R8ifW87g/BtOHHMDpgCK3N3KYEkxZUou51f35eSEXPzg/zNGEfpoe2Xe/XSbBgVnY2lHZgXa/jcG5Ag6r5iAPA=="],
 
     "@haruhimemoe/osu": ["@haruhimemoe/osu@0.4.0", "", { "peerDependencies": { "zod": "^4.0.16" } }, "sha512-dYKV6fIGuesefCbfcX1Dq4+f+UiCP2W1KuUWiaI4qRU+/j1Ppue7L14I2v77kANOwdgMOdV2FMHhtNHVO7H42Q=="],
 
@@ -213,6 +216,8 @@
     "fast-wrap-ansi": ["fast-wrap-ansi@0.2.2", "", { "dependencies": { "fast-string-width": "^3.0.2" } }, "sha512-7F2Fl+TjRSenLqlU3UjSH0iyqopqoZIu7eZVpEirP2g1GtWa2G/ecEmBdgz31+Mxr+ELclgg6sokpSFIQiZ02Q=="],
 
     "fdir": ["fdir@6.5.0", "", { "peerDependencies": { "picomatch": "^3 || ^4" }, "optionalPeers": ["picomatch"] }, "sha512-tIbYtZbucOs0BRGqPJkshJUYdL+SDH7dVM8gjy+ERp3WAUjLEFJE+02kanyHtwjWOnwrKYBiwAmM0p4kLJAnXg=="],
+
+    "fflate": ["fflate@0.8.3", "", {}, "sha512-tbZNuJrLwGUp3zshBtdy4W+ORxZuIh8a5ilyIEQDC5rY1f3U20JMry0Ll3WBzU58EZKsEuJFXhb5gwv8CsPvgA=="],
 
     "fsevents": ["fsevents@2.3.3", "", { "os": "darwin" }, "sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw=="],
 

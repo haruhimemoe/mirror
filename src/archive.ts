@@ -7,7 +7,7 @@
  * @modified Tue Oct 6, 2026
  */
 
-import { OSZ_MIME } from "@haruhimemoe/hinai";
+import { OSZ_MIME } from "./hinai/archive.js";
 import type { DownloadProgress } from "./types.js";
 
 /** The zip signature (`PK\x03\x04`) every .osz starts with. */

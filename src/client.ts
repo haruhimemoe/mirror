@@ -1,19 +1,20 @@
 /**
  * @file src/client.ts
  * @desc createMirrorClient: downloads a set's .osz from the first mirror that has it, failing
- *       over down an ordered list (hinai last by default) and cooling a mirror down when it
+ *       over down an ordered list (hinai first by default) and cooling a mirror down when it
  *       looks down (network errors, timeouts, 429s, or MIRROR_FAILURE_LIMIT failures in a row),
  *       so later downloads skip it until its Retry-After or backoff has passed. Bytes
  *       go from the mirror straight to the caller: nothing is hosted or proxied. Metadata and
- *       availability come from hinai through @haruhimemoe/hinai.
+ *       availability come from hinai (./hinai/).
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
  * @modified Tue Oct 6, 2026
  */
 
-import { backoffDelayMs, createHinaiClient, parseRetryAfter } from "@haruhimemoe/hinai";
 import { ArchiveReadError, readArchive } from "./archive.js";
 import { type MirrorAttempt, MirrorError } from "./errors.js";
+import { createHinaiClient } from "./hinai/client.js";
+import { backoffDelayMs, parseRetryAfter } from "./hinai/retry.js";
 import { DEFAULT_MIRRORS, MIRRORS, type Mirror, type MirrorId } from "./mirrors.js";
 import type {
   DownloadOptions,
@@ -246,9 +247,9 @@ export const createMirrorClient = (options: MirrorClientOptions = {}) => {
       }));
     },
 
-    /** Difficulty metadata from hinai: see @haruhimemoe/hinai's getBeatmaps. */
+    /** Difficulty metadata from hinai: see @haruhimemoe/mirror/hinai's getBeatmaps. */
     getBeatmaps: hinai.getBeatmaps,
-    /** A set's availability from hinai: see @haruhimemoe/hinai's getAvailability. */
+    /** A set's availability from hinai: see @haruhimemoe/mirror/hinai's getAvailability. */
     getAvailability: hinai.getAvailability,
   };
 };

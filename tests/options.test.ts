@@ -55,7 +55,7 @@ describe("options", () => {
     const fetch = vi.fn(async () => ok());
     const client = createMirrorClient();
     vi.stubGlobal("fetch", fetch);
-    expect((await client.downloadSet(1)).mirror).toBe("osudirect");
+    expect((await client.downloadSet(1)).mirror).toBe("hinai");
     expect(fetch).toHaveBeenCalledOnce();
   });
 });

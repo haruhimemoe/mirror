@@ -13,7 +13,7 @@ import type { Mirror, MirrorId } from "./mirrors.js";
 export type MirrorClientOptions = {
   /**
    * Mirrors to try, in order: built-in ids or your own Mirror objects. Default DEFAULT_MIRRORS
-   * (osu.direct, Mino, Sayobot, then hinai).
+   * (hinai, osu.direct, Mino, Sayobot).
    */
   mirrors?: readonly (MirrorId | Mirror)[] | undefined;
   /** The fetch to use. Default globalThis.fetch, looked up per request. */

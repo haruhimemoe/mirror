@@ -1,14 +1,14 @@
 /**
  * @file src/mirrors.ts
  * @desc The public osu! beatmap mirrors the client knows, how each one spells a set's .osz URL,
- *       and the default order: our own pick of mirrors first, hinai last as the fallback. Every
- *       mirror here answers browsers directly (CORS open); none of them is ours.
+ *       and the default order: hinai first, then osu.direct, Mino and Sayobot. Every mirror here
+ *       answers browsers directly (CORS open); none of them is ours.
  * @author David @dvhsh (https://dvh.sh)
  * @created Tue Oct 6, 2026
  * @modified Tue Oct 6, 2026
  */
 
-import { HINAI_BASE_URL, setDownloadUrl } from "@haruhimemoe/hinai";
+import { HINAI_BASE_URL, setDownloadUrl } from "./hinai/client.js";
 
 /** A beatmap mirror: where to send a browser or server for a set's .osz. */
 export type Mirror = {
@@ -72,13 +72,13 @@ export const MIRRORS: Readonly<Record<MirrorId, Mirror>> = Object.freeze({
 });
 
 /**
- * The order a client tries mirrors in when none is given: osu.direct, Mino and Sayobot (fastest
- * first when checked, Oct 2026), then hinai as the fallback. NeriNyan is left out: it answered 404 for every set when checked
+ * The order a client tries mirrors in when none is given: hinai, then osu.direct, Mino and Sayobot
+ * (fastest first when checked, Oct 2026). NeriNyan is left out: it answered 404 for every set when checked
  * (Oct 2026). Pass `mirrors` to change the order or add it back.
  */
 export const DEFAULT_MIRRORS: readonly MirrorId[] = Object.freeze([
+  "hinai",
   "osudirect",
   "catboy",
   "sayobot",
-  "hinai",
 ]);

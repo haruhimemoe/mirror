@@ -1,0 +1,158 @@
+/**
+ * @file scripts/check-consumer.mjs
+ * @desc Installs the packed package with a given zod version into a throwaway project, then
+ *       typechecks a consumer strictly (no skipLibCheck, so broken .d.ts can't hide as `any`) and
+ *       runs it. Proves the zod peer range's floor, that options accept an explicit undefined
+ *       under exactOptionalPropertyTypes, and that the /testing entry resolves and typechecks
+ *       with msw (its optional peer) installed, alongside the root and /hinai entries. Usage: bun run check:consumer <zod version> [local
+ *       package dirs...] (builds first). Needs the npm registry; any local package dirs (say, a
+ *       copy of @haruhimemoe/osu) are packed and installed instead of their npm versions.
+ * @author David @dvhsh (https://dvh.sh)
+ *       Moved from @haruhimemoe/hinai 0.3.1 and extended to the root entry (Oct 6, 2026).
+ * @created Wed Sep 23, 2026
+ * @modified Tue Oct 6, 2026
+ */
+
+import { execFileSync } from "node:child_process";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+const [zod, ...locals] = process.argv.slice(2);
+if (!zod) throw new Error("usage: node scripts/check-consumer.mjs <zod version> [local dirs...]");
+const root = path.resolve(fileURLToPath(new URL("..", import.meta.url)));
+const dir = mkdtempSync(path.join(tmpdir(), "mirror-consumer-"));
+const run = (command, args, cwd = dir) =>
+  execFileSync(command, args, { cwd, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+const pack = (from) =>
+  path.join(dir, run("npm", ["pack", "--silent", "--pack-destination", dir], from).trim());
+
+const CONSUMER = `import type { BeatmapMeta } from "@haruhimemoe/osu/shapes";
+import {
+  type BeatmapLookup,
+  createHinaiClient,
+  type HinaiClient,
+  HinaiError,
+  setDownloadUrl,
+} from "@haruhimemoe/mirror/hinai";
+import { fakeOsz, hinaiHandlers, recordedBeatmaps } from "@haruhimemoe/mirror/testing";
+import {
+  createMirrorClient,
+  type DownloadResult,
+  HinaiError as RootHinaiError,
+  type MirrorClient,
+  MirrorError,
+} from "@haruhimemoe/mirror";
+
+const row = {
+  id: 75,
+  beatmapset_id: 1,
+  mode: "osu",
+  version: "Normal",
+  difficulty_rating: 2.55,
+  cs: 4,
+  ar: 6,
+  accuracy: 6,
+  drain: 6,
+  bpm: 120,
+  total_length: 142,
+  checksum: null,
+  beatmapset: { artist: "a", title: "t", creator: "c", user_id: 2 },
+};
+const client: HinaiClient = createHinaiClient({ fetch: async () => Response.json([row]) });
+const lookup: BeatmapLookup = await client.getBeatmaps([75, 76]);
+const meta: BeatmapMeta | undefined = lookup.found.get(75);
+// @ts-expect-error found holds BeatmapMeta, not strings (it would accept this if types were any)
+const wrong: string | undefined = lookup.found.get(75);
+if (meta?.title !== "t" || lookup.missing[0] !== 76) throw new Error("lookup");
+if (!setDownloadUrl(1).endsWith("?noVideo=true")) throw new Error("url");
+if (!(new HinaiError("x", "y") instanceof Error)) throw new Error("error");
+void wrong;
+
+// Under exactOptionalPropertyTypes, every option takes undefined as "not given" (an unset env var).
+const env: Record<string, string | undefined> = {};
+const maybeSignal: AbortSignal | undefined = env.ABORT ? new AbortController().signal : undefined;
+const zip = Uint8Array.from([0x50, 0x4b, 0x03, 0x04]);
+const loose = createHinaiClient({
+  baseUrl: env.MIRROR,
+  userAgent: env.UA,
+  timeoutMs: undefined,
+  fetch: async () => new Response(zip),
+});
+await loose.getBeatmaps([], { signal: maybeSignal });
+const osz = await loose.downloadSet(1, {
+  signal: maybeSignal,
+  onProgress: undefined,
+  video: undefined,
+});
+if (osz.size !== 4) throw new Error("download");
+
+// The testing entry: its fixtures feed a stub fetch, and fakeOsz passes the client's zip check.
+const recorded = createHinaiClient({
+  fetch: async (input) =>
+    String(input).includes("/d/") ? new Response(fakeOsz(9)) : Response.json(recordedBeatmaps),
+});
+const ids = recordedBeatmaps.map((row) => row.id);
+if ((await recorded.getBeatmaps(ids)).found.size !== ids.length) throw new Error("fixtures");
+if ((await recorded.downloadSet(9)).size !== fakeOsz(9).length) throw new Error("fakeOsz");
+if (hinaiHandlers.length !== 3) throw new Error("handlers");
+
+// The failover client: hinai first, one HinaiError class across entries, undefined options.
+const mirror: MirrorClient = createMirrorClient({
+  mirrors: undefined,
+  userAgent: env.UA,
+  timeoutMs: undefined,
+  fetch: async () => new Response(fakeOsz(9)),
+});
+const result: DownloadResult = await mirror.downloadSet(9, {
+  video: undefined,
+  signal: maybeSignal,
+  onProgress: undefined,
+  checkAvailability: undefined,
+});
+if (result.mirror !== "hinai") throw new Error("order");
+if (RootHinaiError !== HinaiError) throw new Error("one HinaiError");
+if (!(new MirrorError("not_found", "x") instanceof Error)) throw new Error("MirrorError");
+console.log("consumer: ok");
+`;
+
+try {
+  writeFileSync(path.join(dir, "package.json"), JSON.stringify({ type: "module", private: true }));
+  const tarballs = [...locals.map((local) => pack(path.resolve(local))), pack(root)];
+  run("npm", [
+    "install",
+    "--silent",
+    "--no-audit",
+    "--no-fund",
+    ...tarballs,
+    `zod@${zod}`,
+    "msw@2",
+  ]);
+  writeFileSync(
+    path.join(dir, "tsconfig.json"),
+    JSON.stringify({
+      compilerOptions: {
+        strict: true,
+        exactOptionalPropertyTypes: true,
+        noEmit: true,
+        skipLibCheck: false,
+        module: "nodenext",
+        moduleResolution: "nodenext",
+        target: "ES2023",
+        lib: ["ES2023", "DOM", "DOM.Iterable"],
+        types: [],
+      },
+      files: ["consumer.ts"],
+    }),
+  );
+  writeFileSync(path.join(dir, "consumer.ts"), CONSUMER);
+  run(path.join(root, "node_modules", ".bin", "tsc"), ["-p", dir]);
+  run(process.execPath, ["--experimental-strip-types", "--no-warnings", "consumer.ts"]);
+  console.log(`zod ${zod}: ok`);
+} catch (error) {
+  console.error(`zod ${zod}: FAILED\n${error.stdout ?? ""}${error.stderr ?? error.message}`);
+  process.exitCode = 1;
+} finally {
+  rmSync(dir, { recursive: true, force: true });
+}
