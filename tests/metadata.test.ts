@@ -7,9 +7,9 @@
  * @modified Tue Oct 6, 2026
  */
 
-import { recordedBeatmaps } from "@haruhimemoe/hinai/testing";
 import { describe, expect, it } from "vitest";
 import { MirrorError } from "../src/index.js";
+import { recordedBeatmaps } from "../src/testing/index.js";
 import { failure, ok, stub } from "./helpers/stub-fetch.js";
 
 const availability = (disabled: boolean | null, info: string | null = null) =>
