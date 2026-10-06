@@ -1,0 +1,14 @@
+# @haruhimemoe/mirror
+
+> A TypeScript client that downloads osu! beatmapsets (.osz) from whichever public mirror has them, published on npm as @haruhimemoe/mirror. `createMirrorClient()` returns `downloadSet(setId)` (tries osu.direct, Mino and Sayobot, then hinai; resolves to `{ blob, mirror, failed }` with a zip signature check, progress and abort), `downloadLinks(setId)` (each mirror's URL, cooling mirrors last), `health()` (per-mirror failures and cooldowns), and hinai's `getBeatmaps` and `getAvailability`. A download that no mirror could serve rejects with a `MirrorError` (`not_found`, `unavailable` with `retryAfterMs`, or `download_disabled`) listing every attempt. Nothing is hosted or proxied. Runs in browsers, workers and on Node 22.12+. MIT licensed.
+
+## Docs
+
+- [Overview](https://github.com/haruhimemoe/mirror#readme): failover, cooldowns, zip checks, metadata through hinai
+- [Install](https://github.com/haruhimemoe/mirror#install): npm or bun, and the zod peer
+- [Usage](https://github.com/haruhimemoe/mirror#usage): a download with progress and retry handling
+- [API](https://github.com/haruhimemoe/mirror#api): options, downloadSet, downloadLinks, health, metadata
+- [Mirrors](https://github.com/haruhimemoe/mirror#mirrors): the built-ins, the default order, custom mirrors
+- [Errors](https://github.com/haruhimemoe/mirror#errors): MirrorError codes and attempts
+- [Cooldowns](https://github.com/haruhimemoe/mirror#cooldowns): when a mirror is skipped and for how long
+- [Etiquette](https://github.com/haruhimemoe/mirror#etiquette): concurrency, User-Agent, no re-hosting

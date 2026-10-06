@@ -1,0 +1,71 @@
+{
+  "name": "@haruhimemoe/mirror",
+  "version": "0.0.0",
+  "description": "Downloads osu! beatmapsets (.osz) from whichever public mirror has them: Mino, osu.direct and Sayobot first, hinai as the fallback, with failover, per-mirror cooldowns and zip checks. Metadata through hinai. Browser-first; nothing is hosted or proxied.",
+  "keywords": [
+    "osu",
+    "osu!",
+    "beatmap",
+    "mirror",
+    "osz",
+    "hinai",
+    "failover"
+  ],
+  "homepage": "https://github.com/haruhimemoe/mirror#readme",
+  "bugs": "https://github.com/haruhimemoe/mirror/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haruhimemoe/mirror.git"
+  },
+  "license": "MIT",
+  "author": "David (https://dvh.sh)",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=22.12"
+  },
+  "packageManager": "bun@1.4.2",
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\"",
+    "build": "bun run clean && tsc -p tsconfig.build.json",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest",
+    "test:dist": "bun run build && node scripts/smoke.mjs",
+    "prepublishOnly": "bun run check && bun run typecheck && bun run test && bun run test:dist"
+  },
+  "peerDependencies": {
+    "zod": "^4.0.16"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.14",
+    "@types/node": "26.6.2",
+    "@vitest/coverage-v8": "5.0.1",
+    "msw": "2.15.0",
+    "typescript": "7.0.2",
+    "vitest": "5.0.1",
+    "zod": "4.6.5"
+  },
+  "dependencies": {
+    "@haruhimemoe/hinai": "^0.3.1"
+  }
+}
