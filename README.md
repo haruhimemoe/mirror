@@ -64,7 +64,7 @@ Set ids, not difficulty ids: `downloadSet` takes a `beatmapset_id`.
 
 ### `createMirrorClient(options?)`
 
-| Option | Default | |
+| Option | Default | What it does |
 | --- | --- | --- |
 | `mirrors` | `DEFAULT_MIRRORS` | Mirrors to try, in order: built-in ids or your own `Mirror` objects |
 | `fetch` | `globalThis.fetch` | Looked up per request, so test interceptors installed later still apply |
@@ -78,7 +78,7 @@ Throws a `RangeError` when `mirrors` is empty, names an unknown id or repeats on
 
 Resolves to `{ blob, mirror, failed }`: the `.osz` (typed `OSZ_MIME`), the id of the mirror that sent it, and a `MirrorAttempt` for each mirror that failed first.
 
-| Option | |
+| Option | What it does |
 | --- | --- |
 | `video` | `true` for the archive with its video. Default `false` |
 | `signal` | Stops the download; it then rejects with the signal's reason |
