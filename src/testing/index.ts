@@ -2,7 +2,7 @@
  * @file src/testing/index.ts
  * @desc @haruhimemoe/mirror/testing: msw handlers that answer like the mirror (from answers
  *       recorded from it), the recorded answers themselves, and fakeOsz, so an app's tests mock
- *       the mirror the way this package's own tests do. Needs msw 2 (an optional peer).
+ *       the mirror the way this package's own tests do. Needs msw 2 or 3 (an optional peer).
  *       Moved from @haruhimemoe/hinai 0.3.1 (Oct 6, 2026).
  * @author David @dvhsh (https://dvh.sh)
  * @created Mon Sep 28, 2026

@@ -17,7 +17,7 @@ import { hinaiHandlers } from "../../src/testing/index.js";
  */
 export const setupHinaiServer = (): SetupServer => {
   const server = setupServer(...hinaiHandlers);
-  beforeAll(() => server.listen({ onUnhandledRequest: "error" }));
+  beforeAll(() => server.listen({ onUnhandledFrame: "error" }));
   afterEach(() => server.resetHandlers());
   afterAll(() => server.close());
   return server;

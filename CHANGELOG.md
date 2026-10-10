@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-10
+
+### Changed
+
+- Depends on `@haruhimemoe/osu` ^0.7.0 (was ^0.4.0), so apps on osu 0.7 get one copy of the shapes. The `msw` peer for `/testing` takes 3 as well as 2.
+- CI runs CodeQL and a gitleaks scan of the full git history, and Dependabot covers dependencies and pinned actions. Dependencies are on their latest versions.
+
 ## [0.1.0] - 2026-10-06
 
 ### Added
@@ -18,5 +25,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - `MirrorError` with `not_found`, `unavailable` and `download_disabled`, and every failed attempt.
 - `MIRRORS`, `DEFAULT_MIRRORS` and custom `Mirror` objects, with `missingStatuses` for mirrors that don't answer 404.
 
-[unreleased]: https://github.com/haruhimemoe/mirror/compare/v0.1.0...HEAD
+[unreleased]: https://github.com/haruhimemoe/mirror/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/haruhimemoe/mirror/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/haruhimemoe/mirror/releases/tag/v0.1.0
