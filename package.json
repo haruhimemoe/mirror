@@ -77,7 +77,7 @@
     "zod": "4.6.5"
   },
   "dependencies": {
-    "@haruhimemoe/osu": "^0.7.0"
+    "@haruhimemoe/osu": "^0.10.0"
   },
   "peerDependenciesMeta": {
     "msw": {
