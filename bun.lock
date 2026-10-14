@@ -5,7 +5,7 @@
     "": {
       "name": "@haruhimemoe/mirror",
       "dependencies": {
-        "@haruhimemoe/osu": "^0.7.0",
+        "@haruhimemoe/osu": "^0.10.0",
       },
       "devDependencies": {
         "@biomejs/biome": "2.5.15",
@@ -18,7 +18,7 @@
         "zod": "4.6.5",
       },
       "peerDependencies": {
-        "msw": "^2.0.0",
+        "msw": "^2.0.0 || ^3.0.0",
         "zod": "^4.0.16",
       },
       "optionalPeers": [
@@ -55,7 +55,7 @@
 
     "@biomejs/cli-win32-x64": ["@biomejs/cli-win32-x64@2.5.15", "", { "os": "win32", "cpu": "x64" }, "sha512-yAzh4UqEImV6Hcy0zjUqNfJAsUhoD64FBQCdTG8Md/Z2wQeVP/ZmJ3XRYAs1g8J9fjTFyl2fCtc5FB5til47+g=="],
 
-    "@haruhimemoe/osu": ["@haruhimemoe/osu@0.7.0", "", { "peerDependencies": { "zod": "^4.0.16" } }, "sha512-eKO46jp7J6UnQTtQwXzpw8s6s/RUw7x+H8VPbToDuwlNL/iHW3NkO2z0dkqIzA33LfsRBT4XPNl4R4KKrsk5MQ=="],
+    "@haruhimemoe/osu": ["@haruhimemoe/osu@0.10.0", "", { "peerDependencies": { "zod": "^4.0.16" } }, "sha512-f3uNifXAivK5NoblClhOQDDKm2jjO5Pq5URz26QfEq/SFvrBwpQM4Idrk6Uq5HhsMKJugaat25xIr0rwZw77Cg=="],
 
     "@inquirer/ansi": ["@inquirer/ansi@2.0.9", "", {}, "sha512-0Ywt3S8tqM6TWUcsRlBFQ1x+X3/o8kktX0ZiKAnByYb9GFDknnOhse1PVtfiD2BXPI8ar+BWx9PV9R0lQIcygw=="],
 
